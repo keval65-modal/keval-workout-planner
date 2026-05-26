@@ -1,7 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { ExerciseLog, Measurement, WorkoutSession } from "@/lib/types";
+import type {
+  ExerciseLog,
+  HealthDailyMetrics,
+  HealthWorkout,
+  Measurement,
+  WorkoutSession,
+} from "@/lib/types";
 import {
   getDb,
   getLastExerciseLog,
@@ -102,4 +108,28 @@ export function useLastLog(exerciseId: string) {
   }, [exerciseId]);
 
   return log;
+}
+
+export function useHealthSummary() {
+  const [latestDaily, setLatestDaily] = useState<HealthDailyMetrics | null>(null);
+  const [recentWorkouts, setRecentWorkouts] = useState<HealthWorkout[]>([]);
+
+  const refresh = useCallback(async () => {
+    const db = getDb();
+    const daily = await db.healthDaily?.orderBy("date").reverse().limit(1).toArray();
+    setLatestDaily(daily?.[0] ?? null);
+
+    const workouts = await db.healthWorkouts
+      ?.orderBy("startTime")
+      .reverse()
+      .limit(5)
+      .toArray();
+    setRecentWorkouts(workouts ?? []);
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  return { latestDaily, recentWorkouts, refresh };
 }

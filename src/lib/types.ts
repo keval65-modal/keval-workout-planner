@@ -105,6 +105,38 @@ export interface PostureLog {
   date: string;
 }
 
+export type HealthWorkoutSource = "health-connect";
+
+export interface HealthWorkout {
+  id?: number;
+  /** Stable external id (from Health Connect export) */
+  externalId: string;
+  source: HealthWorkoutSource;
+  startTime: string; // ISO
+  endTime: string; // ISO
+  /** e.g. "RUNNING", "WALKING", "STRENGTH_TRAINING" */
+  activityType: string;
+  title?: string;
+  distanceKm?: number;
+  activeCaloriesKcal?: number;
+  steps?: number;
+  avgHeartRateBpm?: number;
+  maxHeartRateBpm?: number;
+  /** Optional raw points for charting */
+  heartRateSeries?: { time: string; bpm: number }[];
+  createdAt: string; // ISO
+}
+
+export interface HealthDailyMetrics {
+  id?: number;
+  source: HealthWorkoutSource;
+  date: string; // yyyy-mm-dd
+  steps?: number;
+  activeCaloriesKcal?: number;
+  restingHeartRateBpm?: number;
+  createdAt: string; // ISO
+}
+
 export interface AppSettings {
   restSeconds: number;
   hydrationReminders: boolean;
@@ -131,5 +163,7 @@ export interface BackupPayload {
   measurements: Measurement[];
   progressPhotos: ProgressPhoto[];
   postureLogs: PostureLog[];
+  healthWorkouts?: HealthWorkout[];
+  healthDaily?: HealthDailyMetrics[];
   settings: AppSettings;
 }

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MFC Sync</string>
+    <string name="title">My Fitness Coach Sync</string>
+    <string name="btn_permissions">Grant Health Connect access</string>
+    <string name="btn_export">Export JSON for My Fitness Coach</string>
+    <string name="status_ready">Ready. Grant permissions then export.</string>
+</resources>
+

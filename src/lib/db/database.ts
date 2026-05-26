@@ -2,6 +2,8 @@ import Dexie, { type Table } from "dexie";
 import type {
   AppSettings,
   ExerciseLog,
+  HealthDailyMetrics,
+  HealthWorkout,
   Measurement,
   PostureLog,
   ProgressPhoto,
@@ -21,6 +23,8 @@ export class FitnessCoachDB extends Dexie {
   measurements!: Table<Measurement, number>;
   progressPhotos!: Table<ProgressPhoto, number>;
   postureLogs!: Table<PostureLog, number>;
+  healthWorkouts!: Table<HealthWorkout, number>;
+  healthDaily!: Table<HealthDailyMetrics, number>;
   settings!: Table<{ key: string; value: AppSettings }, string>;
 
   constructor() {
@@ -31,6 +35,18 @@ export class FitnessCoachDB extends Dexie {
       measurements: "++id, type, date",
       progressPhotos: "++id, date",
       postureLogs: "++id, exerciseId, date",
+      settings: "key",
+    });
+
+    // Health Connect import tables (non-breaking upgrade)
+    this.version(2).stores({
+      exerciseLogs: "++id, exerciseId, date",
+      workoutSessions: "++id, date, dayOfWeek, completed",
+      measurements: "++id, type, date",
+      progressPhotos: "++id, date",
+      postureLogs: "++id, exerciseId, date",
+      healthWorkouts: "++id, externalId, startTime, endTime, activityType",
+      healthDaily: "++id, date",
       settings: "key",
     });
   }

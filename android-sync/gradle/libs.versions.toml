@@ -1,0 +1,22 @@
+[versions]
+agp = "8.7.3"
+kotlin = "2.0.21"
+healthconnect = "1.1.0-alpha12"
+serialization = "1.7.3"
+activity = "1.9.3"
+corektx = "1.15.0"
+appcompat = "1.7.0"
+material = "1.12.0"
+
+[libraries]
+androidx-corektx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+healthconnect = { module = "androidx.health.connect:connect-client", version.ref = "healthconnect" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

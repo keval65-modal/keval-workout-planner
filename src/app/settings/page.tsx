@@ -9,6 +9,7 @@ import {
 } from "@/lib/db/database";
 import type { AppSettings } from "@/lib/types";
 import { downloadBackupJson, importBackup, parseBackupFile } from "@/lib/backup";
+import { importHealthConnectExport } from "@/lib/health-connect-import";
 import {
   DEFAULT_REMINDERS,
   loadReminders,
@@ -34,6 +35,7 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [reminders, setReminders] = useState<ReminderConfig[]>(DEFAULT_REMINDERS);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [hcStatus, setHcStatus] = useState<string | null>(null);
 
   useEffect(() => {
     getSettings().then(setSettings);
@@ -186,6 +188,44 @@ export default function SettingsPage() {
           {importStatus && (
             <p className="text-sm text-muted-foreground">{importStatus}</p>
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Health Connect sync</CardTitle>
+          <CardDescription>
+            Import workouts, heart rate, calories, and steps from the Android companion export.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div>
+            <Label htmlFor="hc-import">Import Health Connect export</Label>
+            <Input
+              id="hc-import"
+              type="file"
+              accept="application/json"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                try {
+                  const payload = await parseBackupFile(file);
+                  const res = await importHealthConnectExport(payload);
+                  setHcStatus(
+                    `Imported ${res.workoutsUpserted} workouts and ${res.dailyUpserted} daily summaries.`
+                  );
+                } catch (err) {
+                  setHcStatus(
+                    err instanceof Error ? err.message : "Import failed"
+                  );
+                }
+              }}
+            />
+          </div>
+          {hcStatus && <p className="text-sm text-muted-foreground">{hcStatus}</p>}
+          <p className="text-xs text-muted-foreground">
+            Tip: export from the Android Health Connect companion after a workout. Media stays local in this app.
+          </p>
         </CardContent>
       </Card>
 

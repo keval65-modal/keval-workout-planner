@@ -1,6 +1,7 @@
 import { TodayWorkout } from "@/components/workout/today-workout";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { WeightChart } from "@/components/dashboard/weight-chart";
+import { HealthSummary } from "@/components/dashboard/health-summary";
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       </header>
       <TodayWorkout />
       <StatsCards />
+      <HealthSummary />
       <WeightChart />
     </div>
   );

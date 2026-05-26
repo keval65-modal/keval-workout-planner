@@ -15,6 +15,8 @@ export async function exportBackup(): Promise<BackupPayload> {
     measurements: await db.measurements.toArray(),
     progressPhotos: await db.progressPhotos.toArray(),
     postureLogs: await db.postureLogs.toArray(),
+    healthWorkouts: (await db.healthWorkouts?.toArray?.()) ?? [],
+    healthDaily: (await db.healthDaily?.toArray?.()) ?? [],
     settings,
   };
 }
@@ -46,6 +48,8 @@ export async function importBackup(payload: BackupPayload): Promise<void> {
       db.measurements,
       db.progressPhotos,
       db.postureLogs,
+      db.healthWorkouts,
+      db.healthDaily,
       db.settings,
     ],
     async () => {
@@ -54,12 +58,20 @@ export async function importBackup(payload: BackupPayload): Promise<void> {
       await db.measurements.clear();
       await db.progressPhotos.clear();
       await db.postureLogs.clear();
+      await db.healthWorkouts.clear();
+      await db.healthDaily.clear();
 
       await db.exerciseLogs.bulkAdd(payload.exerciseLogs);
       await db.workoutSessions.bulkAdd(payload.workoutSessions);
       await db.measurements.bulkAdd(payload.measurements);
       await db.progressPhotos.bulkAdd(payload.progressPhotos);
       await db.postureLogs.bulkAdd(payload.postureLogs);
+      if (payload.healthWorkouts?.length) {
+        await db.healthWorkouts.bulkAdd(payload.healthWorkouts);
+      }
+      if (payload.healthDaily?.length) {
+        await db.healthDaily.bulkAdd(payload.healthDaily);
+      }
       await db.settings.put({
         key: "app",
         value: payload.settings ?? DEFAULT_SETTINGS,
