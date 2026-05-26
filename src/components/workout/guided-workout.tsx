@@ -17,7 +17,7 @@ import {
 } from "@/lib/db/database";
 import { getDb } from "@/lib/db/database";
 import type { ExerciseLog, GuidedExerciseStep } from "@/lib/types";
-import { ExerciseAnimation } from "@/components/exercise/exercise-animation";
+import { ExerciseDemonstration } from "@/components/exercise/exercise-demonstration";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -271,7 +271,7 @@ export function GuidedWorkout() {
           )}
         </p>
 
-        <ExerciseAnimation animationKey={exercise.animationKey} />
+        <ExerciseDemonstration exerciseId={current.exerciseId} />
 
         {lastLog && current.trackWeight && (
           <Card>

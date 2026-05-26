@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { format, startOfWeek, parseISO, isWithinInterval, endOfWeek } from "date-fns";
 import { getExercise, POSTURE_EXERCISE_IDS } from "@/lib/data/exercises";
 import { getDb } from "@/lib/db/database";
-import { ExerciseAnimation } from "@/components/exercise/exercise-animation";
+import { ExerciseDemonstration } from "@/components/exercise/exercise-demonstration";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -110,7 +110,7 @@ export default function PosturePage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <ExerciseAnimation animationKey={ex.animationKey} />
+                <ExerciseDemonstration exerciseId={id} />
                 <p className="text-sm text-muted-foreground">{ex.description}</p>
                 <Button
                   variant={done ? "outline" : "default"}
